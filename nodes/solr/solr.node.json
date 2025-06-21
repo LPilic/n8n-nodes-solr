@@ -1,0 +1,256 @@
+{
+  "name": "solr",
+  "displayName": "Solr",
+  "icon": "file:solr.svg",
+  "group": ["transform"],
+  "version": 1,
+  "description": "Interact with Apache Solr",
+  "defaults": {
+    "name": "Solr"
+  },
+  "inputs": ["main"],
+  "outputs": ["main"],
+  "noDataExpression": true,
+  "credentials": [
+    {
+      "name": "solrApi",
+      "required": true
+    }
+  ],
+  "properties": [
+    {
+      "displayName": "Operation",
+      "name": "operation",
+      "type": "options",
+      "options": [
+        { "name": "Search By Query", "value": "searchByQuery" },
+        { "name": "Add or Update Document", "value": "addOrUpdateDocument" },
+        { "name": "Delete All Documents", "value": "deleteAllDocuments" },
+        { "name": "Delete by ID", "value": "deleteById" },
+        { "name": "Delete by Field", "value": "deleteByField" },
+        { "name": "Delete by Query", "value": "deleteByQuery" }
+      ],
+      "default": "searchByQuery"
+    },
+    {
+      "displayName": "Commit",
+      "name": "commit",
+      "type": "boolean",
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "addOrUpdateDocument",
+            "deleteAllDocuments",
+            "deleteById",
+            "deleteByField",
+            "deleteByQuery"
+          ]
+        }
+      },
+      "description": "Whether to make the changes immediately visible"
+    },
+    {
+      "displayName": "Document",
+      "name": "document",
+      "type": "json",
+      "required": true,
+      "default": "{}",
+      "displayOptions": {
+        "show": {
+          "operation": ["addOrUpdateDocument"]
+        }
+      },
+      "description": "The document to add or update, in JSON format"
+    },
+    {
+      "displayName": "Ignore Version Conflict (Overwrite)",
+      "name": "ignoreVersionConflict",
+      "type": "boolean",
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": ["addOrUpdateDocument"]
+        }
+      },
+      "description": "If enabled, it will overwrite the document in Solr, ignoring any version conflicts. This may overwrite changes made by other processes."
+    },
+    {
+      "displayName": "Document ID",
+      "name": "documentId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": ["deleteById"]
+        }
+      },
+      "description": "The ID of the document to delete"
+    },
+    {
+      "displayName": "Field Name",
+      "name": "fieldName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": ["deleteByField"]
+        }
+      },
+      "description": "The name of the field to delete by"
+    },
+    {
+      "displayName": "Field Value",
+      "name": "fieldValue",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": ["deleteByField"]
+        }
+      },
+      "description": "The value of the field to delete by"
+    },
+    {
+      "displayName": "Delete Query",
+      "name": "deleteQuery",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": ["deleteByQuery"]
+        }
+      },
+      "description": "The query to delete documents by"
+    },
+    {
+      "displayName": "Query",
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "default": "*:*",
+      "displayOptions": {
+        "show": {
+          "operation": ["searchByQuery"]
+        }
+      },
+      "description": "The search query (e.g., 'title:solr' or '*:*' for all documents)"
+    },
+    {
+      "displayName": "Additional Fields",
+      "name": "additionalFields",
+      "type": "collection",
+      "placeholder": "Add Field",
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": ["searchByQuery"]
+        }
+      },
+      "options": [
+        {
+          "displayName": "Query Operator (q.op)",
+          "name": "qOp",
+          "type": "options",
+          "options": [
+            {
+              "name": "AND",
+              "value": "AND"
+            },
+            {
+              "name": "OR",
+              "value": "OR"
+            }
+          ],
+          "default": "OR",
+          "description": "The default operator for query expressions"
+        },
+        {
+          "displayName": "Sort",
+          "name": "sort",
+          "type": "string",
+          "default": "",
+          "description": "Sort order, e.g., 'price asc' or 'score desc'"
+        },
+        {
+          "displayName": "Rows",
+          "name": "rows",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 1
+          },
+          "default": 10,
+          "description": "The number of rows to return"
+        },
+        {
+          "displayName": "Start",
+          "name": "start",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 0
+          },
+          "default": 0,
+          "description": "The offset to start from"
+        },
+        {
+          "displayName": "Field List (fl)",
+          "name": "fl",
+          "type": "string",
+          "default": "",
+          "description": "A comma-separated list of fields to return"
+        },
+        {
+          "displayName": "Default Field (df)",
+          "name": "df",
+          "type": "string",
+          "default": "",
+          "description": "The default field to search in"
+        },
+        {
+          "displayName": "Response Writer (wt)",
+          "name": "wt",
+          "type": "string",
+          "default": "",
+          "placeholder": "json",
+          "description": "The response writer to use"
+        }
+      ]
+    },
+    {
+      "displayName": "Filter Queries (fq)",
+      "name": "filterQueries",
+      "type": "fixedCollection",
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "searchByQuery"
+          ]
+        }
+      },
+      "default": {},
+      "placeholder": "Add Filter Query",
+      "options": [
+        {
+          "name": "filters",
+          "displayName": "Filters",
+          "values": [
+            {
+              "displayName": "Filter Query",
+              "name": "fq",
+              "type": "string",
+              "default": "",
+              "description": "e.g. category:electronics or price:[* TO 100]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
