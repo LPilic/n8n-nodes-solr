@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-solr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This node allows you to connect to Solr from n8n. You can use it to search, update, delete and create documents in your Solr index.",
   "keywords": [
     "n8n-community-node-package",
